@@ -51,17 +51,17 @@
         </thead>
         <tbody>
             <?php
-                
+
             ?>
 
             <tr>
-                <td><input type="text">
+                <td><input type="text" id="nama">
                     <br><br>
                     <ul class="horizontal_listy">
-                        <span><button>LPUSH</button></span>
-                        <span><button>LPOP</button></span>
-                        <span><button>RPUSH</button></span>
-                        <span><button>RPOP</button></span>
+                        <span><button id="lpush">LPUSH</button></span>
+                        <span><button id="lpop">LPOP</button></span>
+                        <span><button id="rpush">RPUSH</button></span>
+                        <span><button id="rpop">RPOP</button></span>
                     </ul>
                 </td>
             </tr>
@@ -69,4 +69,80 @@
     </table>
 </body>
 
+
+<script>
+    $(document).ready(function() {
+        v_nama = document.getElementById("nama")
+        $("#lpush").click(function() {
+            callFunction("lpush");
+        });
+
+        $("#lpop").click(function() {
+            callFunction("lpop");
+        });
+        $("#rpush").click(function() {
+            callFunction("rpush");
+        });
+        $("#lpop").click(function() {
+            callFunction("rpop");
+        });
+
+        function callFunction(functionName) {
+            $.ajax({
+                type: "GET",
+                url: "index.php",
+                data: {
+                    action: functionName,
+                    nama: v_nama
+                },
+                success: function(data) {}
+            });
+        }
+    });
+</script>
+
 </html>
+
+
+<?php
+function lpush($nama)
+{
+    $redis->lpush('people', '$nama');
+}
+
+function rpush($nama)
+{
+    $redis->rpush('people', '$nama');
+}
+function lpop($nama)
+{
+    $redis->lpop('people');
+}
+function rpop($nama)
+{
+    $redis->rpop('people');
+}
+
+
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+    if (function_exists($action)) {
+        if ($action === 'lpush') {
+            $value = $_GET['nama'];
+            lpush($value);
+            
+        } elseif ($action === 'lpop') {
+            lpop();
+        }elseif ($action === 'rpush'){
+            $value = $_GET['nama'];
+            rpush($value);
+        }elseif($action  === 'rpop'){
+            rpop();
+        }
+    } else {
+        echo '<script type="text/javascript">alert("No Function Specified");</script>';
+    }
+} else {
+    echo '<script type="text/javascript">alert("No Function Specified");</script>';
+}
+?>
