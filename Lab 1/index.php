@@ -13,7 +13,8 @@
         <link href="https://fonts.googleapis.com/css?family=Merriweather:400,900,900i" rel="stylesheet">
 
         <title>Redis</title>
-        <link rel="icon" type="image/png" href="./images/logo2.png" sizes="16x16">
+        <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
     </head>
 
     <style>
@@ -30,18 +31,7 @@
 </head>
 
 <body>
-    <?php
-    require 'Predis/Predis/Autoload.php';
 
-    use Predis\Client;
-
-    $redis = new Client([
-        'scheme' => 'tcp',
-        'host' => '127.0.0.1',
-        'port'  => 6379
-    ]);
-
-    ?>
 
     <table class="table">
         <thead>
@@ -51,11 +41,30 @@
         </thead>
         <tbody>
             <?php
+            require 'Predis/Predis/Autoload.php';
+
+            use Predis\Client;
+
+            $redis = new Client([
+                'scheme' => 'tcp',
+                'host' => '127.0.0.1',
+                'port'  => 6379
+            ]);
+            $i = 1;
+            $peopleName = $redis->lrange('people', 0, -1);
+            foreach ($peopleName as $name){
+                echo "<tr>
+                <td>$i</td>
+                <td>$name</td>
+                </tr>";
+                $i = $i+1;
+            };
+            
 
             ?>
 
             <tr>
-                <td><input type="text" id="nama">
+                <td><input type="text" id="nama" class="form-control" placeholder="input name here">
                     <br><br>
                     <ul class="horizontal_listy">
                         <span><button id="lpush">LPUSH</button></span>
@@ -67,12 +76,30 @@
             </tr>
         </tbody>
     </table>
+    
 </body>
 
 
 <script>
     $(document).ready(function() {
-        v_nama = document.getElementById("nama")
+        
+
+        function callFunction(functionName) {
+            v_nama = $("#nama").val();
+            $.ajax({
+                type: "GET",
+                url: "index.php",
+                data: {
+                    action: functionName,
+                    nama: v_nama
+                },
+                success: function(result) {
+                    // alert(result);
+                    window.location.reload();
+                }
+            });
+        }
+
         $("#lpush").click(function() {
             callFunction("lpush");
         });
@@ -83,21 +110,11 @@
         $("#rpush").click(function() {
             callFunction("rpush");
         });
-        $("#lpop").click(function() {
+        $("#rpop").click(function() {
             callFunction("rpop");
         });
 
-        function callFunction(functionName) {
-            $.ajax({
-                type: "GET",
-                url: "index.php",
-                data: {
-                    action: functionName,
-                    nama: v_nama
-                },
-                success: function(data) {}
-            });
-        }
+
     });
 </script>
 
@@ -105,21 +122,41 @@
 
 
 <?php
+
+
 function lpush($nama)
 {
-    $redis->lpush('people', '$nama');
+    global $redis;
+    $len = $redis -> llen('people');
+    if ($len < 10){
+        $redis->lpush('people', $nama);
+    }
+    else{
+        echo 'List already has 10 data';
+    }
+    
 }
 
 function rpush($nama)
 {
-    $redis->rpush('people', '$nama');
+    global $redis;
+    $len = $redis -> llen('people');
+    if ($len < 10){
+        $redis->rpush('people', $nama);
+    }
+    else{
+        echo 'List already has 10 data';
+    }
 }
-function lpop($nama)
+function lpop()
 {
+    global $redis;
+
     $redis->lpop('people');
 }
-function rpop($nama)
+function rpop()
 {
+    global $redis;
     $redis->rpop('people');
 }
 
@@ -130,19 +167,16 @@ if (isset($_GET['action'])) {
         if ($action === 'lpush') {
             $value = $_GET['nama'];
             lpush($value);
-            
         } elseif ($action === 'lpop') {
             lpop();
-        }elseif ($action === 'rpush'){
+        } elseif ($action === 'rpush') {
             $value = $_GET['nama'];
             rpush($value);
-        }elseif($action  === 'rpop'){
+        } elseif ($action  === 'rpop') {
             rpop();
         }
     } else {
         echo '<script type="text/javascript">alert("No Function Specified");</script>';
     }
-} else {
-    echo '<script type="text/javascript">alert("No Function Specified");</script>';
 }
 ?>
