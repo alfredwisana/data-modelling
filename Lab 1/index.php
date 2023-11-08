@@ -95,16 +95,17 @@
         function callFunction(functionName) {
             v_nama = $("#nama").val();
             $.ajax({
-                type: "GET",
-                url: "index.php",
+                type: "POST",
+                url: "redis-proc.php",
                 data: {
                     action: functionName,
                     nama: v_nama
                 },
                 success: function(result) {
+                    // alert('sukses');
+                    // console.log('sukses');
                     alert(result);
-                    window.location.reload();
-                }
+                    setTimeout(function(){window.location.reload()}, 1000);                }
             });
         }
 
@@ -138,8 +139,9 @@ function lpush($nama)
     $len = $redis->llen('people');
     if ($len < 10) {
         $redis->lpush('people', $nama);
+        return $nama . ' has been left pushed';
     } else {
-        echo 'List already has 10 data';
+        return  "List already has 10 data";
     }
 }
 
@@ -149,47 +151,57 @@ function rpush($nama)
     $len = $redis->llen('people');
     if ($len < 10) {
         $redis->rpush('people', $nama);
+        return $nama . ' has been right pushed';
     } else {
-        echo 'List already has 10 data';
+        return "List already has 10 data";
     }
 }
 function lpop()
 {
     global $redis;
 
-    $redis->lpop('people');
+    $lpop = $redis->lpop('people');
+    return $lpop . ' has been left popped';
 }
 function rpop()
 {
     global $redis;
-    $redis->rpop('people');
+    $rpop = $redis->rpop('people');
+    return $rpop . ' has been left popped';
 }
 
 
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
+
+if (isset($_POST['action'])) {
+    $result = array(
+        'message' => ""
+    );
+    $action = $_POST['action'];
     if (function_exists($action)) {
         if ($action === 'lpush') {
-            if (isset($_GET['nama'])) {
-                $value = $_GET['nama'];
+            if (isset($_POST['nama'])) {
+                $value = $_POST['nama'];
                 if (!empty($value)) {
-                    lpush($value);
+                    $result['message'] = lpush($value);
                 }
             }
         } elseif ($action === 'lpop') {
-            lpop();
+            $result['message'] = lpop();
         } elseif ($action === 'rpush') {
-            if (isset($_GET['nama'])) {
-                $value = $_GET['nama'];
+            if (isset($_POST['nama'])) {
+                $value = $_POST['nama'];
                 if (!empty($value)) {
-                    rpush($value);
+                    $result['message'] = rpush($value);
                 }
             }
         } elseif ($action  === 'rpop') {
-            rpop();
+            $result['message'] = rpop();
         }
     } else {
         echo '<script type="text/javascript">alert("No Function Specified");</script>';
     }
+    echo json_encode($result);
+
 }
+
 ?>
