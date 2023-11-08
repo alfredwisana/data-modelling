@@ -74,6 +74,10 @@ if (isset($_POST['action'])) {
                     $result['status'] = $res[0];
                     $result['message'] = $res[1];
                 }
+                else{
+                    $result['status'] = 0;
+                    $result['message'] = 'String is Empty';
+                }
             }
         } elseif ($action === 'lpop') {
             $res = lpop();
@@ -87,6 +91,10 @@ if (isset($_POST['action'])) {
                     $result['status'] = $res[0];
                     $result['message'] = $res[1];
                 }
+                else{
+                    $result['status'] = 0;
+                    $result['message'] = 'String is Empty';
+                }
             }
         } elseif ($action  === 'rpop') {
             $res = rpop();
@@ -94,7 +102,8 @@ if (isset($_POST['action'])) {
             $result['message'] = $res[1];
         }
     } else {
-        echo '<script type="text/javascript">alert("No Function Specified");</script>';
+        $result['status'] = 0;
+            $result['message'] = 'Action Not Found';
     }
     echo json_encode($result);
     // echo $message;
