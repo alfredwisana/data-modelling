@@ -53,7 +53,7 @@ c14210177 -->
 
         <tbody>
             <?php
-            // require 'Predis/Predis/Autoload.php';
+            require 'Predis/Predis/Autoload.php';
 
             use Predis\Client;
 
@@ -68,9 +68,7 @@ c14210177 -->
                 echo "<tr>
                 <td>$name</td>
                 </tr>";
-            };
-
-
+            };      
             ?>
 
             <tr>
@@ -79,9 +77,9 @@ c14210177 -->
                     <ul class="horizontal_listy">
                         <span>
                         <button id="lpush" type="submit" disabled>LPUSH</button>
-                        <button id="lpop" >LPOP</button>
+                        <button id="lpop" type="submit">LPOP</button>
                         <button id="rpush" type="submit" disabled>RPUSH</button>
-                        <button id="rpop">RPOP</button>
+                        <button id="rpop" type="submit">RPOP</button>
                         </span>
                         
                     </ul>
