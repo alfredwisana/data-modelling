@@ -1,6 +1,6 @@
 <?php
 
-require 'Predis/Predis/Autoload.php';
+// require 'Predis/Predis/Autoload.php';
 
 use Predis\Client;
 

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- 
+Alfred Wisana 
+c14210177 -->
+<!-- file predis-proc.php untuk process pada database redis -->
 <head>
 
     <meta charset="utf-8">
@@ -50,7 +53,7 @@
 
         <tbody>
             <?php
-            require 'Predis/Predis/Autoload.php';
+            // require 'Predis/Predis/Autoload.php';
 
             use Predis\Client;
 
@@ -74,10 +77,13 @@
                 <td><input type="text" id="nama" class="form-control" placeholder="input name here">
                     <br><br>
                     <ul class="horizontal_listy">
-                        <span><button id="lpush" type="submit" disabled>LPUSH</button></span>
-                        <span><button id="lpop" >LPOP</button></span>
-                        <span><button id="rpush" type="submit" disabled>RPUSH</button></span>
-                        <span><button id="rpop">RPOP</button></span>
+                        <span>
+                        <button id="lpush" type="submit" disabled>LPUSH</button>
+                        <button id="lpop" >LPOP</button>
+                        <button id="rpush" type="submit" disabled>RPUSH</button>
+                        <button id="rpop">RPOP</button>
+                        </span>
+                        
                     </ul>
                 </td>
             </tr>
