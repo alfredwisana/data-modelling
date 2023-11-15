@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +20,73 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+<?php
+require 'Predis/Predis/Autoload.php';
+
+use Predis\Client;
+
+$redis = new Client([
+    'scheme' => 'tcp',
+    'host' => '127.0.0.1',
+    'port'  => 6379
+]);
+?>
+<style>
+    #wrapper {
+        margin: 0 auto;
+        position: relative;
+        width: 50%;
+    }
+
+    /* #upload {} */
+
+    .table {
+        border: 1px black solid;
+    }
+
+    #caption {
+        font-weight: bold;
+        text-align: center;
+        font-size: larger;
+        background-color: lightgray;
+    }
+</style>
+
 <body>
-    <input type="file" name="" id="csvfile" accept=".csv">
+    <div id="wrapper">
+        <div id="upload">
+            <form action="index.php" method="post">
+                <label for="file">Choose a CSV file:</label>
+                <br>
+                <input type="file" name="file" id="file" accept=".csv" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <br>
+        <div id="data">
+            <form action="index.php" method="post">
+                <button type="submit">RAW</button>
+                <button type="submit">AGR</button>
+            </form>
+        </div>
+        <br>
+        <div id="tabel">
+            <table class="table">
+                <caption id="caption">GLOBAL LAND TEMPERATURE</caption>
+                <thead>
+                    <th></th>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+
 
 
     <table>
 
     </table>
 </body>
+
 </html>
+

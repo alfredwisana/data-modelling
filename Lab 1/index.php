@@ -53,15 +53,15 @@ c14210177 -->
 
         <tbody>
             <?php
-            require 'Predis/Predis/Autoload.php';
+            // require 'Predis/Predis/Autoload.php';
 
-            use Predis\Client;
+            // use Predis\Client;
 
-            $redis = new Client([
-                'scheme' => 'tcp',
-                'host' => '127.0.0.1',
-                'port'  => 6379
-            ]);
+            // $redis = new Client([
+            //     'scheme' => 'tcp',
+            //     'host' => '127.0.0.1',
+            //     'port'  => 6379
+            // ]);
 
             $peopleName = $redis->lrange('people', 0, -1);
             foreach ($peopleName as $name) {
