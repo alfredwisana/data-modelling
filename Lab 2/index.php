@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Redis Time Series</title>
 
     <!-- bootstrap -->
     <meta charset="utf-8">
@@ -32,19 +32,33 @@ $redis = new Client([
 ]);
 ?>
 <style>
-    #wrapper {
+    #table_wrapper {
         margin: 0 auto;
         position: relative;
-        width: 50%;
+        
+        
+    }
+    #wrapper{
+        margin: 0 auto;
+        position: relative;
+        width: 75%;
     }
 
     /* #upload {} */
 
-    .table {
-        border: 1px black solid;
+    table,
+    th,
+    td {
+        border: 1px solid black;
     }
 
-    #caption {
+    .table {
+        margin: 0 auto;
+        width: 100%;
+        margin-right: 10rem;
+    }
+
+    #table_title {
         font-weight: bold;
         text-align: center;
         font-size: larger;
@@ -53,14 +67,14 @@ $redis = new Client([
 </style>
 
 <body>
-    <div id="wrapper">
+    <div id=wrapper>
         <div id="upload">
-            <form action="index.php" method="post">
-                <label for="file">Choose a CSV file:</label>
-                <br>
-                <input type="file" name="file" id="file" accept=".csv" required>
-                <button type="submit">Upload</button>
-            </form>
+
+            <label for="file">Choose a CSV file:</label>
+            <br>
+            <input type="file" name="file" id="file" accept=".csv" required>
+            <button type="submit" id="butt_upload">Upload</button>
+
         </div>
         <br>
         <div id="data">
@@ -70,13 +84,16 @@ $redis = new Client([
             </form>
         </div>
         <br>
-        <div id="tabel">
+        <div id="tab_wrapper">
             <table class="table">
-                <caption id="caption">GLOBAL LAND TEMPERATURE</caption>
-                <thead>
-                    <th></th>
-                </thead>
-            </table>
+                <table class="table">
+                    <h3 id="table_title">GLOBAL LAND TEMPERATURE</h3>
+                    <div id="csvtable"></div>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
         </div>
     </div>
 
@@ -86,7 +103,40 @@ $redis = new Client([
     <table>
 
     </table>
+    </div>
+
 </body>
 
 </html>
 
+
+<script>
+    $(document).ready(function() {
+        $('#butt_upload').on('click', function() {
+            var fileInput = $('#file')[0].files[0];
+
+            if (fileInput) {
+                var formData = new FormData();
+                formData.append('file', fileInput);
+
+                // Send the file to the server using jQuery AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: 'upload.php',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(result) {
+                        $("#csvtable").html(result);
+                        console.log(response);
+                    },
+                    error: function() {
+                        console.error('Error uploading file.');
+                    }
+                });
+            } else {
+                console.error('No file selected.');
+            }
+        });
+    });
+</script>
