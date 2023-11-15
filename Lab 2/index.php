@@ -35,10 +35,11 @@ $redis = new Client([
     #table_wrapper {
         margin: 0 auto;
         position: relative;
-        
-        
+
+
     }
-    #wrapper{
+
+    #wrapper {
         margin: 0 auto;
         position: relative;
         width: 75%;
@@ -78,10 +79,10 @@ $redis = new Client([
         </div>
         <br>
         <div id="data">
-            <form action="index.php" method="post">
-                <button type="submit">RAW</button>
-                <button type="submit">AGR</button>
-            </form>
+
+            <button type="submit" id="raw_butt">RAW</button>
+            <button type="submit" id="agr_butt">AGR</button>
+
         </div>
         <br>
         <div id="tab_wrapper">
@@ -96,15 +97,6 @@ $redis = new Client([
                 </table>
         </div>
     </div>
-
-
-
-
-    <table>
-
-    </table>
-    </div>
-
 </body>
 
 </html>
@@ -124,6 +116,92 @@ $redis = new Client([
                     type: 'POST',
                     url: 'upload.php',
                     data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(result) {
+                        $("#csvtable").html(result);
+                        console.log(response);
+                    },
+                    error: function() {
+                        console.error('Error uploading file.');
+                    }
+                });
+            } else {
+                console.error('No file selected.');
+            }
+        });
+        $('#raw_').on('click', function() {
+            var fileInput = $('#file')[0].files[0];
+
+            if (fileInput) {
+                var formData = new FormData();
+                formData.append('file', fileInput);
+
+                // Send the file to the server using jQuery AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: 'upload.php',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(result) {
+                        $("#csvtable").html(result);
+                        console.log(response);
+                    },
+                    error: function() {
+                        console.error('Error uploading file.');
+                    }
+                });
+            } else {
+                console.error('No file selected.');
+            }
+        });
+        $('#raw_butt').on('click', function() {
+            var fileInput = $('#file')[0].files[0];
+            var funcname = "showraw";
+
+            if (fileInput) {
+                var formData = new FormData();
+                formData.append('file', fileInput);
+
+                // Send the file to the server using jQuery AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: 'showdata.php',
+                    data: {
+                        formData,
+                        functname: funcname
+                    },
+                    contentType: false,
+                    processData: false,
+                    success: function(result) {
+                        $("#csvtable").html(result);
+                        console.log(response);
+                    },
+                    error: function() {
+                        console.error('Error uploading file.');
+                    }
+                });
+            } else {
+                console.error('No file selected.');
+            }
+        });
+        $('#agr_upload').on('click', function() {
+            var fileInput = $('#file')[0].files[0];
+
+            if (fileInput) {
+                var formData = new FormData();
+                formData.append('file', fileInput);
+                var funcname = "aggregate";
+
+                // Send the file to the server using jQuery AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: 'showdata.php',
+                    data: {
+                        formData,
+                        functname: funcname
+                    },
                     contentType: false,
                     processData: false,
                     success: function(result) {
