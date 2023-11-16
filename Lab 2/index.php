@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,900,900i" rel="stylesheet">
 
     <title>Redis</title>
-    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -120,7 +120,8 @@ $redis = new Client([
                     processData: false,
                     success: function(result) {
                         $("#csvtable").html(result);
-                        console.log(response);
+                        console.log(result);
+                        
                     },
                     error: function() {
                         console.error('Error uploading file.');
@@ -130,83 +131,59 @@ $redis = new Client([
                 console.error('No file selected.');
             }
         });
-        $('#raw_').on('click', function() {
+        
+        $('#raw_butt').on('click', function() {
             var fileInput = $('#file')[0].files[0];
+            
 
             if (fileInput) {
                 var formData = new FormData();
+                var functname = "showraw";
                 formData.append('file', fileInput);
+                formData.append('functname', functname);
 
                 // Send the file to the server using jQuery AJAX
                 $.ajax({
                     type: 'POST',
-                    url: 'upload.php',
+                    url: 'showdata.php',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function(result) {
                         $("#csvtable").html(result);
-                        console.log(response);
+                        console.log(formData);
+                        
                     },
                     error: function() {
                         console.error('Error uploading file.');
+                        console.log(formData);
                     }
                 });
             } else {
                 console.error('No file selected.');
             }
         });
-        $('#raw_butt').on('click', function() {
+        $('#agr_butt').on('click', function() {
             var fileInput = $('#file')[0].files[0];
-            var funcname = "showraw";
+
 
             if (fileInput) {
                 var formData = new FormData();
+                var functname = "aggregate";
+
                 formData.append('file', fileInput);
+                formData.append('functname', functname);
 
                 // Send the file to the server using jQuery AJAX
                 $.ajax({
                     type: 'POST',
                     url: 'showdata.php',
-                    data: {
-                        formData,
-                        functname: funcname
-                    },
+                    data: formData,
                     contentType: false,
                     processData: false,
                     success: function(result) {
                         $("#csvtable").html(result);
-                        console.log(response);
-                    },
-                    error: function() {
-                        console.error('Error uploading file.');
-                    }
-                });
-            } else {
-                console.error('No file selected.');
-            }
-        });
-        $('#agr_upload').on('click', function() {
-            var fileInput = $('#file')[0].files[0];
-
-            if (fileInput) {
-                var formData = new FormData();
-                formData.append('file', fileInput);
-                var funcname = "aggregate";
-
-                // Send the file to the server using jQuery AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: 'showdata.php',
-                    data: {
-                        formData,
-                        functname: funcname
-                    },
-                    contentType: false,
-                    processData: false,
-                    success: function(result) {
-                        $("#csvtable").html(result);
-                        console.log(response);
+                        console.log(result);
                     },
                     error: function() {
                         console.error('Error uploading file.');
