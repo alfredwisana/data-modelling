@@ -11,7 +11,7 @@ if (isset($_POST['functname'])) {
 
     $keys = $redis->lrange('listcol', 0, -1);
 
-    echo '<thead> <tr>';
+    echo '<thead id="coltitle"> <tr>';
     #table head
     foreach ($keys as $columnName) {
         $columnName = preg_replace('/(?<!\ )[A-Z]/', ' $0', $columnName);
@@ -50,7 +50,6 @@ if (isset($_POST['functname'])) {
                 } else {
                     $val = (string) $data[$key][$i][1];
                     $val = number_format(floatval($val), 3);
-                    // echo isset($value) ? number_format(floatval($value), 3) : '';
                     echo "<td>$val</td>";
                 }
             }

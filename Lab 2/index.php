@@ -25,18 +25,12 @@ require 'Predis/Predis/Autoload.php';
 
 use Predis\Client;
 
-$redis = new Client([
-    'scheme' => 'tcp',
-    'host' => '127.0.0.1',
-    'port'  => 6379
-]);
+$redis = new Client([]);
 ?>
 <style>
     #table_wrapper {
         margin: 0 auto;
         position: relative;
-
-
     }
 
     #wrapper {
@@ -59,11 +53,25 @@ $redis = new Client([
         margin-right: 10rem;
     }
 
-    #table_title {
+    #table_title,
+    #status {
         font-weight: bold;
         text-align: center;
         font-size: larger;
         background-color: lightgray;
+    }
+
+    #coltitle {
+        font-weight: bold;
+        background-color: lightgoldenrodyellow;
+    }
+
+    #upload {
+        background-color: lightcyan;
+        padding-left: 5rem;
+        margin-top: 2.5rem;
+        padding-top: 0.25rem;
+        padding-bottom: 0.75rem;
     }
 </style>
 
@@ -78,12 +86,15 @@ $redis = new Client([
 
         </div>
         <br>
-        <div id="data">
+        <center>
+            <div id="data_butt">
 
-            <button type="submit" id="raw_butt">RAW</button>
-            <button type="submit" id="agr_butt">AGR</button>
+                <button type="submit" id="raw_butt">RAW</button>
+                <button type="submit" id="agr_butt">AGR</button>
 
-        </div>
+            </div>
+        </center>
+
         <br>
         <div id="tab_wrapper">
             <table class="table">
@@ -112,7 +123,6 @@ $redis = new Client([
                 var formData = new FormData();
                 formData.append('file', fileInput);
 
-                // Send the file to the server using jQuery AJAX
                 $.ajax({
                     type: 'POST',
                     url: 'upload.php',
