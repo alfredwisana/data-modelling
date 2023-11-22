@@ -89,6 +89,7 @@ $redis = new Client([
             <table class="table">
                 <table class="table">
                     <h3 id="table_title">GLOBAL LAND TEMPERATURE</h3>
+                    <h4 id="status"></h4>
                     <div id="csvtable"></div>
 
                     <tbody>
@@ -119,9 +120,10 @@ $redis = new Client([
                     contentType: false,
                     processData: false,
                     success: function(result) {
+                        $("#status").html("CSV DATA");
                         $("#csvtable").html(result);
                         console.log(result);
-                        
+
                     },
                     error: function() {
                         console.error('Error uploading file.');
@@ -131,67 +133,42 @@ $redis = new Client([
                 console.error('No file selected.');
             }
         });
-        
+
         $('#raw_butt').on('click', function() {
-            var fileInput = $('#file')[0].files[0];
-            
+            var v_functname = "showraw";
 
-            if (fileInput) {
-                var formData = new FormData();
-                var functname = "showraw";
-                formData.append('file', fileInput);
-                formData.append('functname', functname);
+            $.ajax({
+                type: 'POST',
+                url: 'showdata.php',
+                data: {
+                    functname: v_functname
+                },
+                dataType: 'html', // Specify the expected data type
+                success: function(result) {
+                    $("#status").html("RAW DATA");
+                    $("#csvtable").html(result);
 
-                // Send the file to the server using jQuery AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: 'showdata.php',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(result) {
-                        $("#csvtable").html(result);
-                        console.log(formData);
-                        
-                    },
-                    error: function() {
-                        console.error('Error uploading file.');
-                        console.log(formData);
-                    }
-                });
-            } else {
-                console.error('No file selected.');
-            }
+                    console.log(result);
+                }
+            });
         });
+
         $('#agr_butt').on('click', function() {
-            var fileInput = $('#file')[0].files[0];
+            var v_functname = "aggregate";
 
-
-            if (fileInput) {
-                var formData = new FormData();
-                var functname = "aggregate";
-
-                formData.append('file', fileInput);
-                formData.append('functname', functname);
-
-                // Send the file to the server using jQuery AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: 'showdata.php',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(result) {
-                        $("#csvtable").html(result);
-                        console.log(result);
-                    },
-                    error: function() {
-                        console.error('Error uploading file.');
-                    }
-                });
-            } else {
-                console.error('No file selected.');
-            }
+            $.ajax({
+                type: 'POST',
+                url: 'showdata.php',
+                data: {
+                    functname: v_functname
+                },
+                dataType: 'html', // Specify the expected data type
+                success: function(result) {
+                    $("#status").html("AGGREGATED DATA");
+                    $("#csvtable").html(result);
+                    console.log(result);
+                }
+            });
         });
     });
 </script>
