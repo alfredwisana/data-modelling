@@ -1,5 +1,10 @@
 <?php
 
+// Alfred Wisana
+// c14210177
+// Used For show the raw or aggregated data in the index.php
+
+
 require 'Predis/Predis/Autoload.php';
 
 use Predis\Client;

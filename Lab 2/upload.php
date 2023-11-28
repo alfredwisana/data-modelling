@@ -1,5 +1,8 @@
 <?php
 
+// Alfred Wisana -- c14210177
+// Used for upload the csv file
+
 require 'Predis/Predis/Autoload.php';
 
 use Predis\Client;
@@ -42,14 +45,11 @@ function convertCsvToTimeSeries($csvFilePath)
                 for ($i = 0; $i < count($firstDataRow); $i++) {
                     $columnName = $header[$i];
 
-                    // Use the column name as the time series key
                     $sourcekey = $columnName;
 
-                    // Get the corresponding value from the first row
                     $valueBase = (float) $firstDataRow[$i];
                     $period = 31556952000;
 
-                    // Add the base data to RedisTimeSeries with timestamp 0
 
                     $redis->rpush('listcol', $sourcekey);
                     $redis->executeRaw(['DEL', $sourcekey]);
@@ -57,6 +57,7 @@ function convertCsvToTimeSeries($csvFilePath)
                     $rulekey = $sourcekey . "_compacted";
                     $redis->executeRaw(['DEL', $rulekey]);
                     $redis->executeRaw(['TS.CREATE', $rulekey]);
+                    # Time Series Compaction Rules Creation
                     if (strpos($sourcekey, 'Average') !== false) {
                         $redis->executeRaw(['TS.CREATERULE', $sourcekey, $rulekey, 'AGGREGATION', 'avg', $period]);
                         echo "Avg";
@@ -70,6 +71,8 @@ function convertCsvToTimeSeries($csvFilePath)
                 }
 
                 while (($data = fgetcsv($file)) !== false) {
+
+                    # Add Data to the time series
 
                     for ($i = 0; $i < count($data); $i++) {
                         $columnName = $header[$i];
@@ -103,7 +106,7 @@ function displayCsvAsTable($csvFilePath)
     if ($file !== false) {
 
         $header = fgetcsv($file);
-        echo '<thead>';
+        echo '<thead id="coltitle">';
         // Display the column name
         echo '<tr>';
         foreach ($header as $columnName) {
