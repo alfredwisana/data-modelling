@@ -50,9 +50,7 @@ echo "<br><br>\n";
 // Find all restaurants receiving grades.score > 70
 $cursor = $resto->find(
   [
-    'grades.score' => [
-      '$gt' => 70,
-    ],
+    'grades.score' => ['$lt' => 5,],
   ],
   [
     'projection' => [

@@ -37,19 +37,97 @@ $resto = $client->dmds->resto;
         margin: 0 auto;
         width: 50%;
     }
+
+    #filter {
+        margin-top: 1.5rem;
+        background-color: lightgoldenrodyellow;
+        padding-top: 1.5px;
+        height: 2.75rem;
+        padding-left: 1.7rem;
+    }
+
+    #data {
+        width: 100%;
+        padding-left: 17.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 0.5rem;
+        background-color: lightcyan;
+    }
+
+    .card {
+        position: relative;
+        background-color: lightblue;
+    }
 </style>
 
 <body>
     <div id="wrapper">
         <div id="filter">
-            
-        <input type="text" name="" id="cuisine">
-        <input type="number" name="" id="score">
-        <button type="submit" id="butt-filter"></button>
-        
+            <select  id="borough">
+                <option value="0">Pilih Kategori</option>
+                <?php
+                $cursor = $resto->distinct('borough');
+                foreach ($cursor as $str) {
+
+                ?>
+                    <option value="<?php echo $str; ?>"><?php echo $str; ?></option>
+                <?php
+                }
+                ?>
+            </select>
+            <input type="text" name="" id="cuisine" placeholder="Cuisine">
+            <input type="number" name="" id="score" placeholder="Score">
+            <input type="radio" name="regex" value="gt"> GT
+            <input type="radio" name="regex" value="gte"> GTE
+            <input type="radio" name="regex" value="lt"> LT
+            <input type="radio" name="regex" value="lte"> LTE
+            <input type="radio" name="regex" value="eq"> EQ
+            <button type="submit" id="butt-filter">Filter</button>
+
         </div>
+        <br>
         <div id="data">
-        
+            <?php
+            $cursor = $resto->find();
+            foreach ($cursor as $doc) {
+            ?>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <?php
+                        foreach ($doc as $key => $value) {
+                            if (is_string($value)) { ?>
+
+                                <p class="card-text"><?php echo $key . ":" . $value; ?></p>
+
+
+                            <?php
+                            }
+                            if ($key === 'grades') {
+                            ?>
+                                <p class="card-text"><?php echo $key . ":" ?>
+                                    <?php
+                                    foreach ($value as $grade) {
+                                    ?>
+                                    <p class="card-text">Date: <?php echo  $grade['date']; ?></p>
+                                    <p class="card-text">Grade: <?php echo $grade['grade']; ?></p>
+                                    <p class="card-text">Score: <?php echo $grade['score']; ?></p>
+
+                                    <?php
+                                    }
+                                    ?>
+
+                                </p>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+                <br>
+            <?php
+            }
+
+            ?>
         </div>
     </div>
 </body>
@@ -57,23 +135,31 @@ $resto = $client->dmds->resto;
 </html>
 
 <script>
-    $(document).ready(function(){
-        $('#raw_butt').on('click', function() {
-            var v_borough=a;
-            var v_cuisine=b;
-            var v_score = 0;
-            var v_regex = 0;
+    $(document).ready(function() {
+                $('#butt-filter').on('click', function() {
+                        var v_borough = $("#borough").val();
+                        var v_cuisine = $("#cuisine").val();
+                        var v_score = $("#score").val();
+                        var v_regex = $("input[name='regex']:checked").val();
 
-            $.ajax({
-                type:'POST',
-                url: "process.php",
-                data:{
-
-                },
-                success:function(result){
-                    $("#data").html(result);
-                }
-            })
-        }
-    })
+                        console.log(v_borough);
+                        console.log(v_cuisine);
+                        console.log(v_score);
+                        console.log(v_regex);
+                        $.ajax({
+                            type: 'POST',
+                            url: "process.php",
+                            data: {
+                                borough: v_borough,
+                                cuisine: v_cuisine,
+                                score: v_score,
+                                regex: v_regex
+                            },
+                            success: function(result) {
+                                $("#data").html(result);
+                                console.log(result);
+                            }
+                        })
+                    })
+                });
 </script>
