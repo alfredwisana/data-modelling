@@ -64,7 +64,7 @@ $resto = $client->dmds->resto;
     <div id="wrapper">
         <div id="filter">
             <select  id="borough">
-                <option value="0">Pilih Kategori</option>
+                <option value="0">Choose Borough</option>
                 <?php
                 $cursor = $resto->distinct('borough');
                 foreach ($cursor as $str) {
@@ -77,12 +77,14 @@ $resto = $client->dmds->resto;
             </select>
             <input type="text" name="" id="cuisine" placeholder="Cuisine">
             <input type="number" name="" id="score" placeholder="Score">
-            <input type="radio" name="regex" value="gt"> GT
+            <!-- <input type="radio" name="regex" value="gt"> GT
             <input type="radio" name="regex" value="gte"> GTE
-            <input type="radio" name="regex" value="lt"> LT
-            <input type="radio" name="regex" value="lte"> LTE
             <input type="radio" name="regex" value="eq"> EQ
-            <button type="submit" id="butt-filter">Filter</button>
+            <input type="radio" name="regex" value="lte"> LTE
+            <input type="radio" name="regex" value="lt"> LT -->
+            <button type="submit" id="butt-filter" class="btn btn-outline-dark">Filter</button>
+
+            <!-- <button type="submit" id="butt-filter">Filter</button> -->
 
         </div>
         <br>
@@ -97,7 +99,7 @@ $resto = $client->dmds->resto;
                         foreach ($doc as $key => $value) {
                             if (is_string($value)) { ?>
 
-                                <p class="card-text"><?php echo $key . ":" . $value; ?></p>
+                                <p class="card-text"><?php echo $key . ": " . $value; ?></p>
 
 
                             <?php
@@ -140,12 +142,12 @@ $resto = $client->dmds->resto;
                         var v_borough = $("#borough").val();
                         var v_cuisine = $("#cuisine").val();
                         var v_score = $("#score").val();
-                        var v_regex = $("input[name='regex']:checked").val();
+                       // var v_regex = $("input[name='regex']:checked").val();
 
                         console.log(v_borough);
                         console.log(v_cuisine);
                         console.log(v_score);
-                        console.log(v_regex);
+                        // console.log(v_regex);
                         $.ajax({
                             type: 'POST',
                             url: "process.php",
@@ -153,7 +155,7 @@ $resto = $client->dmds->resto;
                                 borough: v_borough,
                                 cuisine: v_cuisine,
                                 score: v_score,
-                                regex: v_regex
+                                //regex: v_regex
                             },
                             success: function(result) {
                                 $("#data").html(result);
