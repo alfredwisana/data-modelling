@@ -6,10 +6,15 @@ $client = Laudis\Neo4j\ClientBuilder::create()->withDriver('default', 'bolt://ne
 
 
 $result = $client->run(<<<'CYPHER'
-MATCH (people:Person) RETURN people
+MATCH (s1:Supplier)-->()-->()<--()<--(s2:Supplier)
+WHERE s1.companyName = «company» AND s1 <> s2
+RETURN s2.companyName as Competitor, count(s2) as NoProducts
+ORDER BY NoProducts DESC
 CYPHER, ['dbName' => 'neo4j']);
 
 
-
+foreach($result as $person){
+    echo $person -> get('Competitor'). "</br>\n";
+}
 
 ?>
