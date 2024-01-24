@@ -1,5 +1,9 @@
 <!-- Alfred Wisana
-c14210177 -->
+c14210177 
+
+TAMPILAN NYA GANTI KE TABEL YA
+
+-->
 <?php
 
 

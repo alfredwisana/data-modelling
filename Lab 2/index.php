@@ -2,7 +2,10 @@
 <html lang="en">
 
 <!-- Alfred Wisana
-c14210177 -->
+c14210177 
+
+INI ADA SALAH DI NGUBAH TANGGALNYA
+-->
 
 
 <head>
