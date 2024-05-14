@@ -148,9 +148,11 @@ c14210177 -->
         $("#lpop").click(function() {
             callFunction("lpop");
         });
+
         $("#rpush").click(function() {
             callFunction("rpush");
         });
+        
         $("#rpop").click(function() {
             callFunction("rpop");
         });

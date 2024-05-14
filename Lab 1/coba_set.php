@@ -109,7 +109,7 @@ c14210177 -->
             v_nama = $("#nama").val();
             $.ajax({
                 type: "POST",
-                url: "set_proc.php",
+                url: "set-proc.php",
                 dataType: "json",
                 data: {
                     action: functionName,
