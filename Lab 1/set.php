@@ -23,7 +23,8 @@ $redis->sadd('myset', 'George');
 $redis->sadd('myset', 'George');
 $redis->sadd('myset', 'George');
 $redis->sadd('myset', 'Christopher');
-
+echo "Number in Set";
+echo $redis->scard('myset')."\n";
 print_r($redis->smembers('myset'));
 
 echo $redis->sismember('myset', 'George')."\n";
