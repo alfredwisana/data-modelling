@@ -1,0 +1,8 @@
+LAB 1 ==> REDIS DATABASE
+<br>
+LAB 2 ==> REDIS TIME-SERIES
+<br>
+LAB 3 ==> MONGO DB
+<br>
+LAB 4 ==> NEO4J (GRAPH DATABASE)
+<br>
