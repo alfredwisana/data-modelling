@@ -20,11 +20,9 @@ function add($nama)
         }
         else{
             $redis->sadd('person', $nama);
-            return [1, $nama . ' has been added'];
-            
+            return [1, $nama . ' has been added'];   
         }
          
-        
     } else {
 
         return [0, "Set already has 10 data"];
